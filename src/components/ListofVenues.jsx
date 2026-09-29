@@ -15,6 +15,7 @@ import theaterTable from "../assets/theater.svg"
 import classroomTable from "../assets/class.svg"
 import dining from "../assets/dining.svg"
 import axios from "axios"
+import VenueRowSkeleton from './ui/VenueRowSkeleton'
 
 
 const PLACEHOLDER_VENUE_IMAGE = 'https://via.placeholder.com/300'
@@ -922,12 +923,7 @@ const ListofVenues = () => {
           <main className="lg:col-span-3 order-1 lg:order-2 space-y-6">
          
           {/* Loading State */}
-          {loadingVenues && (
-            <div className="text-center py-12">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-              <p className="mt-4 text-gray-600">Loading venues...</p>
-            </div>
-          )}
+          {loadingVenues && <VenueRowSkeleton count={4} />}
 
           {/* Error State */}
           {venuesError && !loadingVenues && (

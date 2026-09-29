@@ -21,6 +21,7 @@ const NavBar = () => {
   const [showCityModal, setShowCityModal] = useState(false);
   const [citySearch, setCitySearch] = useState('');
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [apiCities, setApiCities] = useState([]);
   const dropdownRef = useRef(null);
   const navigations = [
@@ -59,43 +60,45 @@ const NavBar = () => {
     };
   }, []);
 
- const handleLogout = async () => {
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+    setIsLoggingOut(true);
+    setShowUserDropdown(false);
+    setIsOpen(false);
 
-  const refresh = localStorage.getItem("refresh_token");
-  const access = localStorage.getItem("access_token");
+    const refresh = localStorage.getItem('refresh_token');
+    const access = localStorage.getItem('access_token');
 
-  // If no tokens found, just clear storage and redirect
-  if (!refresh || !access) {
-    clearAuthData();
-    navigate("/");
-    return;
-  }
+    if (!refresh || !access) {
+      clearAuthData();
+      navigate('/');
+      setIsLoggingOut(false);
+      return;
+    }
 
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BASEURL}/accounts/logout/`,
-      { refresh_token: refresh },
-      {
-        headers: {
-          Authorization: `Bearer ${access}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    
-  } catch (error) {
-    console.error(
-      "❌ Logout error:",
-      error.response?.status,
-      error.response?.data || error.message
-    );
-    // Even if the API fails, proceed with local cleanup
-  } finally {
-    clearAuthData();
-    navigate("/");
-  }
-};
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_BASEURL}/accounts/logout/`,
+        { refresh_token: refresh },
+        {
+          headers: {
+            Authorization: `Bearer ${access}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+    } catch (error) {
+      console.error(
+        'Logout error:',
+        error.response?.status,
+        error.response?.data || error.message
+      );
+    } finally {
+      clearAuthData();
+      navigate('/');
+      setIsLoggingOut(false);
+    }
+  };
 
 // helper function to clear localStorage and notify listeners
 const clearAuthData = () => {
@@ -328,13 +331,23 @@ const clearAuthData = () => {
                           </Link>
                           <div className="border-t border-gray-200 my-1"></div>
                           <button
-                            onClick={() => {
-                              setShowUserDropdown(false);
-                              handleLogout();
-                            }}
-                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                            type="button"
+                            disabled={isLoggingOut}
+                            onClick={() => handleLogout()}
+                            className={`block w-full text-left px-4 py-2 text-sm transition-colors duration-200 flex items-center gap-2 ${
+                              isLoggingOut
+                                ? 'text-gray-400 cursor-wait opacity-60'
+                                : 'text-gray-700 hover:bg-gray-100'
+                            }`}
                           >
-                            Logout
+                            {isLoggingOut ? (
+                              <>
+                                <span className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-gray-300 border-t-indigo-600 inline-block shrink-0" aria-hidden />
+                                Logging out…
+                              </>
+                            ) : (
+                              'Logout'
+                            )}
                           </button>
                         </div>
                       </div>
@@ -457,14 +470,23 @@ const clearAuthData = () => {
                           </Link>
                           <div className="border-t border-gray-200 my-1"></div>
                           <button
-                            onClick={() => {
-                              setShowUserDropdown(false);
-                              setIsOpen(false);
-                              handleLogout();
-                            }}
-                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                            type="button"
+                            disabled={isLoggingOut}
+                            onClick={() => handleLogout()}
+                            className={`block w-full text-left px-4 py-2 text-sm transition-colors duration-200 flex items-center gap-2 ${
+                              isLoggingOut
+                                ? 'text-gray-400 cursor-wait opacity-60'
+                                : 'text-gray-700 hover:bg-gray-100'
+                            }`}
                           >
-                            Logout
+                            {isLoggingOut ? (
+                              <>
+                                <span className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-gray-300 border-t-indigo-600 inline-block shrink-0" aria-hidden />
+                                Logging out…
+                              </>
+                            ) : (
+                              'Logout'
+                            )}
                           </button>
                         </div>
                       </div>
@@ -476,6 +498,22 @@ const clearAuthData = () => {
           </div>
         )}
       </nav>
+
+      {isLoggingOut && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
+          role="status"
+          aria-busy="true"
+          aria-live="polite"
+          aria-label="Signing out"
+        >
+          <div className="bg-white rounded-xl shadow-xl border border-gray-200 px-8 py-6 flex flex-col items-center gap-3 max-w-sm w-full">
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600" />
+            <p className="text-base font-semibold text-gray-900">Signing you out</p>
+            <p className="text-sm text-gray-500 text-center">Please wait a moment…</p>
+          </div>
+        </div>
+      )}
 
       {/* City Selection Modal */}
       {showCityModal && (

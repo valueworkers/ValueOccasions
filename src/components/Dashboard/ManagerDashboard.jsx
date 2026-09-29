@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import TableSkeleton from '../ui/TableSkeleton';
+import InlineBlockSkeleton from '../ui/InlineBlockSkeleton';
+import LoadingButton from '../ui/LoadingButton';
 
 const DEFAULT_MANAGER_PHOTO = 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D';
 
@@ -1327,7 +1330,7 @@ const ManagerDashboard = ({ subTab: propSubTab, setSubTab: propSetSubTab }) => {
       {isVsreOwner && activeTab === 'my' && (
         <div className="bg-gray-50 rounded-xl p-6 border-2 border-gray-200">
           {isLoadingManagers ? (
-            <div className="text-center text-gray-600 py-12 text-lg">Loading managers...</div>
+            <TableSkeleton rows={6} columns={6} />
           ) : managersError ? (
             <div className="text-center text-red-600 py-12 text-lg">{managersError}</div>
           ) : filteredManagers.length === 0 ? (
@@ -1995,13 +1998,14 @@ const ManagerDashboard = ({ subTab: propSubTab, setSubTab: propSetSubTab }) => {
             </div>
           </div>
           <div className="mt-6 flex justify-end">
-            <button 
-              onClick={addManager} 
-              disabled={isSubmitting}
-              className={`bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-semibold shadow-md transition-colors ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
+            <LoadingButton
+              onClick={addManager}
+              loading={isSubmitting}
+              loadingText="Adding…"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-semibold shadow-md transition-colors"
             >
-              {isSubmitting ? 'Adding...' : 'Add Manager'}
-            </button>
+              Add Manager
+            </LoadingButton>
           </div>
           {formFeedback.message && (
             <div className={`mt-4 text-sm ${formFeedback.type === 'error' ? 'text-red-600' : 'text-green-600'}`}>
@@ -2415,9 +2419,7 @@ const ManagerDashboard = ({ subTab: propSubTab, setSubTab: propSetSubTab }) => {
                 Select Reporting Manager
               </label>
               {isLoadingAssignableParents ? (
-                <div className="w-full rounded-lg border-2 border-gray-300 bg-white px-4 py-3 text-gray-600 text-center">
-                  Loading assignable managers...
-                </div>
+                <InlineBlockSkeleton className="h-12 w-full rounded-lg" />
               ) : (
                 <select
                   value={selectedReportingManagerId}
@@ -2598,7 +2600,7 @@ const ManagerDashboard = ({ subTab: propSubTab, setSubTab: propSetSubTab }) => {
                   )}
 
                   {isLoadingAssignableEntities ? (
-                    <div className="text-center py-6 text-sm text-gray-600">Loading options...</div>
+                    <InlineBlockSkeleton className="h-12 w-full rounded-lg" />
                   ) : assignableEntities.length > 0 ? (
                     <div className="space-y-2">
                       <label className="text-xs font-semibold text-gray-700">

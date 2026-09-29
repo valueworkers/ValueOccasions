@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import axios from 'axios';
+import EmployeeCardGridSkeleton from '../ui/EmployeeCardGridSkeleton';
 
 const DEFAULT_PHOTO = 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D';
 
@@ -1460,7 +1461,7 @@ const Attendence = () => {
             </div>
           </div>
           {isLoadingStaff ? (
-            <div className="text-center text-gray-600 py-12 text-lg">Loading staff...</div>
+            <EmployeeCardGridSkeleton count={6} />
           ) : staffError ? (
             <div className="text-center text-red-600 py-12 text-lg">{staffError}</div>
           ) : filteredStaff.length === 0 ? (
@@ -1810,7 +1811,7 @@ const Attendence = () => {
             </div>
           </div>
           {isLoadingManagers ? (
-            <div className="text-center text-gray-600 py-12 text-lg">Loading managers...</div>
+            <EmployeeCardGridSkeleton count={6} />
           ) : managersError ? (
             <div className="text-center text-red-600 py-12 text-lg">{managersError}</div>
           ) : filteredManagers.length === 0 ? (

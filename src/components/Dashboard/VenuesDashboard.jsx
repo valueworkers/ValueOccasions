@@ -14,6 +14,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setVenues as setVenuesRedux, setLoading, setError } from '../../store/slices/venuesSlice';
+import VenueRowSkeleton from '../ui/VenueRowSkeleton';
 
 const seatingIcon = type => {
   switch(type) {
@@ -1147,13 +1148,7 @@ const VenuesDashboard = () => {
         
         <div className="flex flex-col gap-2">
           {isLoadingVenues ? (
-            <div className="bg-white rounded-lg p-8 text-center">
-              <div className="flex flex-col items-center justify-center gap-3">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                <p className="text-gray-600">Loading venues...</p>
-                <p className="text-sm text-gray-400">Fetching data...</p>
-              </div>
-            </div>
+            <VenueRowSkeleton count={5} />
           ) : filteredVenues.length === 0 ? (
             <div className="bg-white rounded-lg p-8 text-center text-gray-600">
               {searchTerm.trim()

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import DashboardPanelSkeleton from '../ui/DashboardPanelSkeleton';
 
 // Lazy load all dashboard components to prevent unnecessary API calls
 const VenuesDashboard = lazy(() => import('./VenuesDashboard'));
@@ -146,7 +147,7 @@ const MainDashboard = () => {
             {/* Main Section - wrap content in similar white rounded card */}
             <main className="md:col-span-4 flex flex-col gap-7">
               <div className="rounded-2xl shadow-md border border-gray-200 bg-white p-2 sm:p-3 mt-0 md:mt-0">
-                <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="text-gray-500">Loading...</div></div>}>
+                <Suspense fallback={<DashboardPanelSkeleton />}>
                   <SelectedComponent />
                 </Suspense>
               </div>

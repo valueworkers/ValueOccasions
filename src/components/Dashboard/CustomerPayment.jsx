@@ -17,6 +17,8 @@ import {
   FiArrowUp,
   FiArrowDown
 } from 'react-icons/fi';
+import StatsRowSkeleton from '../ui/StatsRowSkeleton';
+import TableSkeleton from '../ui/TableSkeleton';
 
 const CustomerPayment = () => {
   const [payments, setPayments] = useState([]);
@@ -478,11 +480,10 @@ const CustomerPayment = () => {
   if (isLoading) {
     return (
       <div className="py-3 px-1">
-        <div className="w-full">
-          <div className="bg-white rounded-lg shadow-md p-6 text-center">
-            <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-200 border-t-blue-600 mx-auto"></div>
-            <p className="text-gray-600 mt-3 text-xs">Loading payment data...</p>
-          </div>
+        <div className="w-full space-y-4">
+          <div className="h-8 w-56 bg-gray-200 rounded animate-pulse" />
+          <StatsRowSkeleton count={4} />
+          <TableSkeleton rows={6} columns={5} />
         </div>
       </div>
     );

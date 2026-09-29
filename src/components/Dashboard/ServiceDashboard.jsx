@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FiPlus, FiX, FiStar, FiMapPin, FiPhone, FiBriefcase, FiGlobe, FiEdit2, FiTrash2, FiCamera, FiCoffee, FiMusic, FiHeart } from 'react-icons/fi';
 import { GiPalette } from 'react-icons/gi';
+import CardGridSkeleton from '../ui/CardGridSkeleton';
+import FormFieldsSkeleton from '../ui/FormFieldsSkeleton';
 
 const categories = ['Photography', 'Caterers', 'Decoration', 'Music', 'Senior Care'];
 
@@ -644,7 +646,7 @@ const ServiceDashboard = () => {
         {/* Services List - Always Shown */}
         <div className="flex flex-col gap-2">
           {isLoadingServices ? (
-            <div className="bg-white rounded-lg p-8 text-center text-gray-600">Loading services...</div>
+            <CardGridSkeleton count={6} />
           ) : servicesError ? (
             <div className="bg-white rounded-lg p-8 text-center text-red-600">{servicesError}</div>
           ) : adminServices.length > 0 ? (
@@ -814,9 +816,7 @@ const ServiceDashboard = () => {
               </div>
               
               {isLoadingServiceDetails ? (
-                <div className="p-12 text-center">
-                  <div className="text-gray-600 text-lg">Loading service details...</div>
-                </div>
+                <FormFieldsSkeleton fields={8} />
               ) : (
                 <>
               <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">

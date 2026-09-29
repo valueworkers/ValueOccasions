@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FiStar, FiMapPin, FiPhone, FiBriefcase, FiGlobe, FiCamera, FiCoffee, FiMusic, FiX } from 'react-icons/fi';
 import { GiPalette } from 'react-icons/gi';
+import CardGridSkeleton from '../ui/CardGridSkeleton';
 
 const categoryTheme = {
   Photography: {
@@ -182,7 +183,7 @@ const BookingDashboard = () => {
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Select a Service to Book</h2>
         
         {isLoadingServices ? (
-          <div className="bg-white rounded-lg p-8 text-center text-gray-600">Loading services...</div>
+          <CardGridSkeleton count={6} />
         ) : servicesError ? (
           <div className="bg-white rounded-lg p-8 text-center text-red-600">{servicesError}</div>
         ) : adminServices.length > 0 ? (

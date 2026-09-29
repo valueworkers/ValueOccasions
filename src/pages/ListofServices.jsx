@@ -5,6 +5,7 @@ import { useParams, useNavigate, useLocation, useSearchParams } from 'react-rout
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { serviceProviders as staticServiceProviders } from '../data/serviceProviders'
+import CardGridSkeleton from '../components/ui/CardGridSkeleton'
 
 const categoryTheme = {
   Photography: {
@@ -390,12 +391,7 @@ const ListofServices = () => {
         </div>
 
         {/* Loading State */}
-        {isLoadingServices && (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p className="mt-4 text-gray-600">Loading services...</p>
-          </div>
-        )}
+        {isLoadingServices && <CardGridSkeleton count={6} />}
 
         {/* Error State */}
         {servicesError && !isLoadingServices && (

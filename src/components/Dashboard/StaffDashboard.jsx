@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import TableSkeleton from '../ui/TableSkeleton';
+import LoadingButton from '../ui/LoadingButton';
+import InlineBlockSkeleton from '../ui/InlineBlockSkeleton';
 
 const DEFAULT_STAFF_PHOTO = 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D';
 
@@ -1298,7 +1301,7 @@ const StaffDashboard = ({ subTab: propSubTab, setSubTab: propSetSubTab }) => {
       {canManageStaff && activeTab === 'my' && (
         <div className="bg-gray-50 rounded-xl p-6 border-2 border-gray-200">
           {isLoadingStaff ? (
-            <div className="text-center text-gray-600 py-12 text-lg">Loading staff...</div>
+            <TableSkeleton rows={6} columns={6} />
           ) : staffError ? (
             <div className="text-center text-red-600 py-12 text-lg">{staffError}</div>
           ) : filteredStaff.length === 0 ? (
@@ -1941,13 +1944,14 @@ const StaffDashboard = ({ subTab: propSubTab, setSubTab: propSetSubTab }) => {
             </div>
           </div>
           <div className="mt-6 flex justify-end">
-            <button 
-              onClick={addStaff} 
-              disabled={isSubmitting}
-              className={`bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-semibold shadow-md transition-colors ${isSubmitting ? 'opacity-75 cursor-not-allowed' : ''}`}
+            <LoadingButton
+              onClick={addStaff}
+              loading={isSubmitting}
+              loadingText="Adding…"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-semibold shadow-md transition-colors"
             >
-              {isSubmitting ? 'Adding...' : 'Add Staff'}
-            </button>
+              Add Staff
+            </LoadingButton>
           </div>
           {formFeedback.message && (
             <div className={`mt-4 text-sm ${formFeedback.type === 'error' ? 'text-red-600' : 'text-green-600'}`}>
@@ -2382,7 +2386,7 @@ const StaffDashboard = ({ subTab: propSubTab, setSubTab: propSetSubTab }) => {
                 Select Reporting Manager
               </label>
               {isLoadingAssignableParents ? (
-                <div className="py-3 text-sm text-gray-500">Loading managers...</div>
+                <InlineBlockSkeleton className="h-12 w-full rounded-lg" />
               ) : assignableParents.length === 0 ? (
                 <div className="py-3 text-sm text-gray-500">
                   No assignable managers returned for this staff member.
@@ -2548,7 +2552,7 @@ const StaffDashboard = ({ subTab: propSubTab, setSubTab: propSetSubTab }) => {
                   )}
 
                   {isLoadingAssignableEntities ? (
-                    <div className="text-center py-6 text-sm text-gray-600">Loading options...</div>
+                    <InlineBlockSkeleton className="h-12 w-full rounded-lg" />
                   ) : assignableEntities.length > 0 ? (
                     <div className="space-y-2">
                       <label className="text-xs font-semibold text-gray-700">
